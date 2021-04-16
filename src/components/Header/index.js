@@ -14,7 +14,7 @@ export default function Header() {
       </div>
       <Link to="/dashboard"><FiHome color="#FFF" size={24} /> Chamados</Link>
       <Link to="/dashboard"><FiUser color="#FFF" size={24} /> Clientes</Link>
-      <Link to="/dashboard"><FiSettings color="#FFF" size={24} /> Configurações</Link>
+      <Link to="/profile"><FiSettings color="#FFF" size={24} /> Configurações</Link>
 
     </div>
   );

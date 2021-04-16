@@ -63,10 +63,18 @@
     display:none;
   }
 }
+.content{
+  margin-left:200px ;
+  padding: 1px 10px;
+}
+
 @media screen and(max-width:400px){
   .sidebar a {
     text-align:center;
     float: none;
+  }
+  div.content{
+    margin-left: 0;
   }
   .sidebar a svg{
     display: none;
