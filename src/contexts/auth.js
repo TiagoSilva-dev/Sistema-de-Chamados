@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from 'react';
 import firebase from '../services/firebaseConnection';
+import { toast } from 'react-toastify';
 
 export const AuthContext = createContext({});
 
@@ -24,7 +25,7 @@ function AuthProvider({ children }) {
   }, [])
 
   async function signUp(email, password, nome) {
-    setLoading(true);
+    setloadingAuth(true);
     firebase.auth().createUserWithEmailAndPassword(email, password).then(async (value) => {
 
       let uid = value.user.uid;
@@ -41,15 +42,17 @@ function AuthProvider({ children }) {
         setUser(data);
         storageUser(data);
         setloadingAuth(false);
+        toast.success('Bem vindo a plataforma');
       }).catch((error) => {
         console.log(error);
+        toast.error('Ops , algo deu errado ! ')
         setloadingAuth(false);
       })
     })
   }
 
   async function signIn(email, password) {
-    setloadingAuth(false);
+    setloadingAuth(true);
     await firebase.auth().signInWithEmailAndPassword(email, password)
       .then(async (value) => {
         let uid = value.user.uid;
@@ -64,9 +67,17 @@ function AuthProvider({ children }) {
         setloadingAuth(false);
         storageUser(data);
         setUser(data);
+        toast.success('Bem vindo de volta');
       }).catch((error) => {
-        console.log(error)
         setloadingAuth(false);
+        switch (error.code) {
+          case 'auth/too-many-requests':
+            return toast.error('⛔ acesso a esta conta foi temporariamente desabilitado… definindo sua senha ou você pode tentar novamente mais tarde.', { autoClose: 8000, position: "bottom-center", pauseOnHover: true, draggable: true, });
+          default:
+            return null
+        }
+
+
       })
   }
 
@@ -80,7 +91,7 @@ function AuthProvider({ children }) {
   }
 
   return (
-    <AuthContext.Provider value={{ signed: !!user, user, signUp, signOut, signIn }}>
+    <AuthContext.Provider value={{ signed: !!user, user, signUp, signOut, signIn, loadingAuth }}>
       {children}
     </AuthContext.Provider>
   );

@@ -2,7 +2,6 @@ import React, { useState, useContext } from 'react';
 import logo from '../../assets/logo.png';
 import { Link } from 'react-router-dom';
 import '../SignIn/style.css';
-import firebase from '../../services/firebaseConnection';
 import { AuthContext } from '../../contexts/auth';
 
 
@@ -11,7 +10,7 @@ export default function SignUp() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const { signUp } = useContext(AuthContext);
+  const { signUp, loadingAuth } = useContext(AuthContext);
 
   function handleSubmit(e) {
     e.preventDefault();
@@ -36,7 +35,7 @@ export default function SignUp() {
           <input type="text" placeholder="nome" value={nome} onChange={(e) => { setNome(e.target.value) }}></input>
           <input type="email" placeholder="teste@teste.com" value={email} onChange={(e) => { setEmail(e.target.value) }}></input>
           <input type="password" placeholder="********" value={password} onChange={(e) => { setPassword(e.target.value) }}></input>
-          <button type="submit">Criar Conta</button>
+          <button type="submit">{loadingAuth ? 'Carregando ... ' : 'Cadastrar'}</button>
         </form>
         <Link to="/">já tem uma conta?</Link>
       </div>
